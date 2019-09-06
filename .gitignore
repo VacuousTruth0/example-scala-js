@@ -1,0 +1,12 @@
+.idea/*
+!.idea/dictionaries
+project/project/
+project/target/
+
+target/scala-2.12/*
+!target/scala-2.12/classes
+target/scala-2.12/classes/*
+!target/scala-2.12/classes/index-opt.html
+!target/scala-2.12/example-opt.js
+target/streams
+target/.history
