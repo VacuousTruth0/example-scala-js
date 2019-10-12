@@ -54,18 +54,13 @@ object DrawFunctions {
     * Clears the canvas if enough points have been plotted.
     * Then plots a point at the current position.
     *
-    * Note that the number of points plotted is initially one less than the number of positions generated,
-    * since the most recently generated position has not yet been plotted.
-    *
     * @param ctx    Rendering context for the canvas.
     * @param params Parameters derived from the current program state that are required to update the canvas.
     */
   def draw(ctx: dom.CanvasRenderingContext2D, params: DrawParams): Unit = {
+    import params.{clearFlag, p}
     
-    import params.{count, p}
-    val numPoints: Int = count - 1
-    
-    if (numPoints % 3000 == 0) clear(ctx)
+    if (clearFlag) clear(ctx)
     plotPoint(ctx, p)
   }
 }

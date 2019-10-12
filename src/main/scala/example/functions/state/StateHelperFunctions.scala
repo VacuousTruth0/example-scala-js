@@ -32,4 +32,16 @@ private[state] object StateHelperFunctions {
     val vertex: Point = randomFromSeq(vertices)
     (p + vertex) / 2
   }
+  
+  /** Returns true if the canvas should be cleared before plotting the next point and false otherwise.
+    *
+    * Note that the number of points plotted is one less than the number of positions generated,
+    * since the most recently generated position has not yet been plotted.
+    *
+    * @param count Number of positions generated.
+    */
+  def getClearFlag(count: Int): Boolean = {
+    val numPoints: Int = count - 1
+    numPoints % 3000 == 0
+  }
 }

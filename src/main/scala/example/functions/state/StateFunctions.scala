@@ -1,6 +1,6 @@
 package example.functions.state
 
-import example.functions.state.StateHelperFunctions.nextPosition
+import example.functions.state.StateHelperFunctions.{getClearFlag, nextPosition}
 import example.{DrawParams, Point}
 
 /** Contains the program state, and functions used to access and update it. */
@@ -28,5 +28,8 @@ object StateFunctions {
   }
   
   /** Returns the parameters derived from the current program state that are required to update the canvas. */
-  def drawParams: DrawParams = DrawParams(count, p)
+  def drawParams: DrawParams = {
+    val clearFlag: Boolean = getClearFlag(count)
+    DrawParams(clearFlag, p)
+  }
 }
