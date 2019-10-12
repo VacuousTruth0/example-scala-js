@@ -1,6 +1,6 @@
 package example.functions.draw
 
-import example.CanvasDim.{height, maxX, maxY, width}
+import example.CanvasDim._
 import example.util.ConfigProvider.config
 import example.{DrawParams, Point}
 import org.scalajs.dom
@@ -36,11 +36,13 @@ object DrawFunctions {
     * @param p Current position.
     */
   private def getRgb(p: Point): Rgb = {
-    val heightRatio: Double = (maxRgb + maxY).toDouble / (maxRgb + p.y)
     
-    val r: Int = (heightRatio * p.x).toInt
-    val g: Int = (heightRatio * (maxX - p.x)).toInt
-    val b: Int = p.y
+    val scaled: Point = scalePoint(p)
+    val heightRatio: Double = (maxRgb + defaultMaxY).toDouble / (maxRgb + scaled.y)
+    
+    val r: Int = (heightRatio * scaled.x).toInt
+    val g: Int = (heightRatio * (defaultMaxX - scaled.x)).toInt
+    val b: Int = scaled.y
     
     Rgb(r, g, b)
   }
