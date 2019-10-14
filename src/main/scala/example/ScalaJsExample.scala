@@ -1,6 +1,8 @@
 package example
 
-import example.functions.HelperFunctions.{clear, nextPosition, plotPoint}
+import example.functions.draw.DrawFunctions
+import example.functions.state.StateFunctions
+import example.functions.state.StateFunctions.drawParams
 import org.scalajs.dom
 import org.scalajs.dom.html
 
@@ -10,29 +12,16 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 @JSExportTopLevel("ScalaJsExample")
 object ScalaJsExample {
   
-  /** Number of points plotted. */
-  var count: Int = 0
-  
-  /** Current position on the canvas. */
-  var p: Point = Point(0, 0)
-  
   /** Runs one iteration.
+    *
+    * Repeatedly updates the program state and then updates the canvas using the current state,
+    * until the required number of points has been plotted.
     *
     * @param ctx Rendering context for the canvas.
     */
   private def run(ctx: dom.CanvasRenderingContext2D): Unit = (0 until 10).foreach { _ =>
-    
-    // Clear the canvas if enough points have been plotted
-    if (count % 3000 == 0) clear(ctx)
-    
-    // Move to the next position
-    p = nextPosition(p)
-    
-    // Plot a point at the current position
-    plotPoint(ctx, p)
-    
-    // Increment the number of points plotted
-    count += 1
+    StateFunctions.update()
+    DrawFunctions.draw(ctx, drawParams)
   }
   
   /** Main method. This will be called in the HTML page.
