@@ -12,14 +12,29 @@ private[state] object StateHelperFunctions {
   /** Clear the canvas whenever this number of points has been plotted (since the canvas was last cleared). */
   private val maxPoints: Int = config.getInt("plot.maxPoints")
   
-  /** Vertices of the Sierpinski triangle. */
-  private val vertices: Seq[Point] = {
+  /** Scale down the copies of the fractal by this factor. */
+  private val fractalScale: Int = config.getInt("fractalScale")
+  
+  /** Attractors of the Sierpinski carpet (vertices and midpoints of the sides). */
+  private val attractors: Seq[Point] = {
+  
+    val midX: Int = maxX / 2
+    val midY: Int = maxY / 2
     
-    val topVertex: Point = Point(maxX / 2, 0)
-    val leftVertex: Point = Point(0, maxY)
-    val rightVertex: Point = Point(maxX, maxY)
+    val topLeft: Point = Point(0, 0)
+    val topRight: Point = Point(maxX, 0)
+    val bottomLeft: Point = Point(0, maxY)
+    val bottomRight: Point = Point(maxX, maxY)
     
-    Seq(topVertex, leftVertex, rightVertex)
+    val midTop: Point = Point(midX, 0)
+    val midBottom: Point = Point(midX, maxY)
+    val midLeft: Point = Point(0, midY)
+    val midRight: Point = Point(maxX, midY)
+    
+    val vertices: Seq[Point] = Seq(topLeft, topRight, bottomLeft, bottomRight)
+    val sideMidpoints: Seq[Point] = Seq(midTop, midBottom, midLeft, midRight)
+    
+    vertices ++ sideMidpoints
   }
   
   /** Returns a random element of a sequence.
@@ -29,13 +44,13 @@ private[state] object StateHelperFunctions {
     */
   private def randomFromSeq[T](xs: Seq[T]): T = xs(Random.nextInt(xs.length))
   
-  /** Returns the next position (halfway between the current position and a randomly chosen vertex).
+  /** Returns the next position (two thirds of the way from the current position to a randomly chosen attractor).
     *
     * @param p Current position.
     */
   def nextPosition(p: Point): Point = {
-    val vertex: Point = randomFromSeq(vertices)
-    (p + vertex) / 2
+    val attractor: Point = randomFromSeq(attractors)
+    (p + attractor * (fractalScale - 1)) / fractalScale
   }
   
   /** Returns true if the canvas should be cleared before plotting the next point and false otherwise.

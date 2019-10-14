@@ -15,6 +15,14 @@ case class Point(x: Int, y: Int) {
     */
   def +(p: Point): Point = Point(x + p.x, y + p.y)
   
+  /** Returns the result when this position (interpreted as a vector) is scaled by the input number.
+    *
+    * Each co-ordinate is scaled by the input number.
+    *
+    * @param d Input number.
+    */
+  def *(d: Int): Point = Point(x * d, y * d)
+  
   /** Returns the result when this position (interpreted as a vector) is scaled by the reciprocal of the input number.
     *
     * Each co-ordinate is scaled by the reciprocal of the input number.
