@@ -1,5 +1,7 @@
 package example.functions.draw
 
+import example.CanvasDim.{height, maxX, maxY, width}
+import example.util.ConfigProvider.config
 import example.{DrawParams, Point}
 import org.scalajs.dom
 
@@ -14,13 +16,19 @@ object DrawFunctions {
     */
   private case class Rgb(r: Int, g: Int, b: Int)
   
+  /** Canvas background colour. */
+  private val backgroundColour: String = config.getString("colour.background")
+  
+  /** Maximum value for RGB intensity. */
+  private val maxRgb: Int = config.getInt("colour.maxRgb")
+  
   /** Clears the canvas.
     *
     * @param ctx Rendering context for the canvas.
     */
   private def clear(ctx: dom.CanvasRenderingContext2D): Unit = {
-    ctx.fillStyle = "black"
-    ctx.fillRect(0, 0, 255, 255)
+    ctx.fillStyle = backgroundColour
+    ctx.fillRect(0, 0, width, height)
   }
   
   /** Returns the RGB component values for the current position.
@@ -28,10 +36,10 @@ object DrawFunctions {
     * @param p Current position.
     */
   private def getRgb(p: Point): Rgb = {
-    val height: Double = 512.0 / (255 + p.y)
+    val heightRatio: Double = (maxRgb + maxY).toDouble / (maxRgb + p.y)
     
-    val r: Int = (height * p.x).toInt
-    val g: Int = (height * (255 - p.x)).toInt
+    val r: Int = (heightRatio * p.x).toInt
+    val g: Int = (heightRatio * (maxX - p.x)).toInt
     val b: Int = p.y
     
     Rgb(r, g, b)

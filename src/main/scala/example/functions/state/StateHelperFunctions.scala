@@ -1,18 +1,23 @@
 package example.functions.state
 
+import example.CanvasDim.{maxX, maxY}
 import example.Point
+import example.util.ConfigProvider.config
 
 import scala.util.Random
 
 /** Contains functions that are used in updating the program state but cannot access the state directly. */
 private[state] object StateHelperFunctions {
   
+  /** Clear the canvas whenever this number of points has been plotted (since the canvas was last cleared). */
+  private val maxPoints: Int = config.getInt("plot.maxPoints")
+  
   /** Vertices of the Sierpinski triangle. */
   private val vertices: Seq[Point] = {
     
-    val topVertex: Point = Point(128, 0)
-    val leftVertex: Point = Point(0, 255)
-    val rightVertex: Point = Point(255, 255)
+    val topVertex: Point = Point(maxX / 2, 0)
+    val leftVertex: Point = Point(0, maxY)
+    val rightVertex: Point = Point(maxX, maxY)
     
     Seq(topVertex, leftVertex, rightVertex)
   }
@@ -42,6 +47,6 @@ private[state] object StateHelperFunctions {
     */
   def getClearFlag(count: Int): Boolean = {
     val numPoints: Int = count - 1
-    numPoints % 3000 == 0
+    numPoints % maxPoints == 0
   }
 }
