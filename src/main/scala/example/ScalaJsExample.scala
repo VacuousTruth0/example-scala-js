@@ -13,8 +13,8 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 @JSExportTopLevel("ScalaJsExample")
 object ScalaJsExample {
   
-  /** Time between runs, in milliseconds. */
-  private val waitTime: Int = config.getInt("plot.waitTime")
+  /** Time taken for the graphs to cover the width of the canvas, in milliseconds. */
+  private val widthTime: Int = config.getInt("plot.widthTime")
   
   /** Resizes the canvas to fill its parent element. This automatically clears the canvas.
     *
@@ -42,7 +42,7 @@ object ScalaJsExample {
   /** Main method. This will be called in the HTML page.
     *
     * Resizes the canvas to fill its parent element,
-    * then runs iterations repeatedly with the specified time interval.
+    * then runs iterations repeatedly with the required time interval.
     *
     * @param canvas HTML canvas element.
     */
@@ -53,6 +53,8 @@ object ScalaJsExample {
     val canvasDim: CanvasDim = CanvasDim(canvas.width, canvas.height)
     
     val brush: dom.CanvasRenderingContext2D = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
+    val waitTime: Int = widthTime / canvas.width
+    
     dom.window.setInterval(() => run(brush, canvasDim), waitTime)
   }
 }
