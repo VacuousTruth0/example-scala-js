@@ -18,6 +18,9 @@ object DrawFunctions {
   /** Height and width of the points plotted. */
   private val pointSize: Int = config.getInt("plot.pointSize")
   
+  /** Horizontal and vertical offset of the top left corner of the points plotted, relative to the centre. */
+  private val pointOffset: Int = pointSize / 2
+  
   /** Clears the canvas.
     *
     * @param brush     Rendering context for the canvas.
@@ -30,7 +33,7 @@ object DrawFunctions {
     brush.fillRect(0, 0, width, height)
   }
   
-  /** Colours in a small square on the canvas, with its top left corner at the current position for the graph.
+  /** Colours in a small square on the canvas, with its centre at the current position for the graph.
     *
     * @param brush  Rendering context for the canvas.
     * @param x      Current horizontal position (x-value) on the canvas.
@@ -39,8 +42,12 @@ object DrawFunctions {
     * @param colour Colour for the graph.
     */
   private def plotPoint(brush: dom.CanvasRenderingContext2D, x: Int, y: Int, colour: String): Unit = {
+    
+    val topLeftX: Int = x - pointOffset
+    val topLeftY: Int = y - pointOffset
+    
     brush.fillStyle = colour
-    brush.fillRect(x, y, pointSize, pointSize)
+    brush.fillRect(topLeftX, topLeftY, pointSize, pointSize)
   }
   
   /** Updates the canvas, based on the current program state.
