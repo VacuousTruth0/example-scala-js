@@ -1,11 +1,22 @@
 package example.functions.state
 
+import example.util.ConfigProvider.config
 import example.CanvasDim
 
 import scala.math.{abs, sin}
 
 /** Contains functions that are used in updating the program state but cannot access the state directly. */
 private[state] object StateHelperFunctions {
+  
+  /** Standard graph width, used to rescale horizontal positions (x-values)
+    * on the canvas for input to the graph functions.
+    */
+  private val stdWidth: Double = config.getDouble("graphs.stdWidth")
+  
+  /** Standard graph height, used to rescale vertical positions (y-values)
+    * returned from the graph functions.
+    */
+  private val stdHeight: Double = config.getDouble("graphs.stdHeight")
   
   /** A function whose graph will be plotted.
     * It represents a real-valued mathematical function on the real numbers.
@@ -32,7 +43,7 @@ private[state] object StateHelperFunctions {
     * @param x     Current horizontal position on the canvas.
     * @param width Canvas width, in pixels.
     */
-  private def getGraphX(x: Int, width: Int): Double = x * 75.0 / width
+  private def getGraphX(x: Int, width: Int): Double = x * stdWidth / width
   
   /** Returns the current standardised vertical positions (y-values).
     *
@@ -50,7 +61,7 @@ private[state] object StateHelperFunctions {
     * @param stdYs  Current standardised vertical positions.
     * @param height Canvas height, in pixels.
     */
-  private def getScaledYs(stdYs: Seq[Double], height: Int): Seq[Int] = stdYs.map(_ / 30.0 * height).map(_.toInt)
+  private def getScaledYs(stdYs: Seq[Double], height: Int): Seq[Int] = stdYs.map(_ / stdHeight * height).map(_.toInt)
   
   /** Returns the current vertical positions (y-values) on the canvas of the x-axes of the graphs,
     * arranged in the vertical order of the graphs on the page.

@@ -1,13 +1,22 @@
 package example.functions.draw
 
+import example.util.ConfigProvider.config
 import example.{CanvasDim, DrawParams}
 import org.scalajs.dom
+
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 /** Contains functions used to update the canvas contents. */
 object DrawFunctions {
   
+  /** Canvas background colour. */
+  private val backgroundColour: String = config.getString("colour.background")
+  
   /** Colour for each graph, arranged in the vertical order of the graphs on the page. */
-  private val graphColours: Seq[String] = Seq("red", "green", "blue")
+  private val graphColours: Seq[String] = config.getStringList("colour.graphs").asScala
+  
+  /** Height and width of the points plotted. */
+  private val pointSize: Int = config.getInt("plot.pointSize")
   
   /** Clears the canvas.
     *
@@ -17,7 +26,7 @@ object DrawFunctions {
   private def clear(brush: dom.CanvasRenderingContext2D, canvasDim: CanvasDim): Unit = {
     import canvasDim.{height, width}
     
-    brush.fillStyle = "white"
+    brush.fillStyle = backgroundColour
     brush.fillRect(0, 0, width, height)
   }
   
@@ -31,7 +40,7 @@ object DrawFunctions {
     */
   private def plotPoint(brush: dom.CanvasRenderingContext2D, x: Int, y: Int, colour: String): Unit = {
     brush.fillStyle = colour
-    brush.fillRect(x, y, 3, 3)
+    brush.fillRect(x, y, pointSize, pointSize)
   }
   
   /** Updates the canvas, based on the current program state.

@@ -3,6 +3,7 @@ package example
 import example.functions.draw.DrawFunctions
 import example.functions.state.StateFunctions
 import example.functions.state.StateFunctions.drawParams
+import example.util.ConfigProvider.config
 import org.scalajs.dom
 import org.scalajs.dom.{html, raw}
 
@@ -11,6 +12,9 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 /** Plots graphs over time. */
 @JSExportTopLevel("ScalaJsExample")
 object ScalaJsExample {
+  
+  /** Time between runs, in milliseconds. */
+  private val waitTime: Int = config.getInt("plot.waitTime")
   
   /** Resizes the canvas to fill its parent element. This automatically clears the canvas.
     *
@@ -49,6 +53,6 @@ object ScalaJsExample {
     val canvasDim: CanvasDim = CanvasDim(canvas.width, canvas.height)
     
     val brush: dom.CanvasRenderingContext2D = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
-    dom.window.setInterval(() => run(brush, canvasDim), 20)
+    dom.window.setInterval(() => run(brush, canvasDim), waitTime)
   }
 }
